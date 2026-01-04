@@ -1,1 +1,1 @@
-# OfficeHoursCalc
+# Office Hours Calculator
