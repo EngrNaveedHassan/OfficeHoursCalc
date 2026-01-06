@@ -2,40 +2,46 @@
 using OfficeHoursCalc.Context;
 using OfficeHoursCalc.Entities;
 using OfficeHoursCalc.Interfaces;
+using System.Threading.Tasks;
 
 namespace OfficeHoursCalc.Repositories
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IUserRepository
     {
-        private readonly AppDbContext _dbContext;
-        public UserRepository(AppDbContext appDbContext)
+        private readonly AppDbContext _context;
+
+        public UserRepository(AppDbContext context)
         {
-            _dbContext = appDbContext;
+            _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public async Task AddAsync(User user)
         {
-            return await _dbContext.Users.ToListAsync();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<User> GetById(int id)
+        public async Task DeleteAsync(int userId)
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
-        }
-        public async Task Add(User user)
-        {
-            await _dbContext.AddAsync(user);
+            var user = await GetByIdAsync(userId);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(User user)
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-             _dbContext.Update(user);
+            return await _context.Users.ToListAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task<User> GetByIdAsync(int userId)
         {
-            var user = await GetById(id);
-            _dbContext.Remove(user);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
     }
 }

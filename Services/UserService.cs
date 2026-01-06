@@ -1,89 +1,74 @@
 ﻿using OfficeHoursCalc.Entities;
 using OfficeHoursCalc.Interfaces;
-using OfficeHoursCalc.Repositories;
 using System.Threading.Tasks;
 
 namespace OfficeHoursCalc.Services
 {
-    public class UserService : IService<User>
+    public class UserService : IUserService
     {
-        private readonly IRepository<User> _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(IRepository<User> userService)
+        public UserService(IUserRepository userRepository)
         {
-            _userRepository = userService;
+            _userRepository = userRepository;
         }
-        public async Task<IEnumerable<User>> GetAll()
+
+        public async Task AddAsync(User user)
         {
             try
             {
-                return await _userRepository.GetAll();
+                if (user != null)
+                {
+                    await _userRepository.AddAsync(user);
+                }
+                else
+                {
+                    throw new NullReferenceException("user");
+                }
             }
             catch (Exception exp)
             {
                 Console.WriteLine(exp);
                 throw new Exception();
-                throw;
             }
         }
 
-        public async Task<User> GetById(int id)
+        public Task DeleteAsync(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<User>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> GetByIdAsync(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<User> GetCurrentUserAsync()
         {
             try
             {
-                return await _userRepository.GetById(id);
+                // Implement latter on auth
+                var user = await _userRepository.GetByIdAsync(1);
+                if (user != null)
+                    return user;
+                else
+                    return null;
             }
             catch (Exception exp)
             {
                 Console.WriteLine(exp);
                 throw new Exception();
-                throw;
             }
         }
 
-        public async Task<bool> Add(User user)
+        public Task UpdateAsync(User user)
         {
-            try
-            {
-                await _userRepository.Add(user);
-                return true;
-            }
-            catch (Exception exp)
-            {
-                Console.WriteLine(exp);
-                throw new Exception();
-                throw;
-            }
-        }
-
-        public bool Update(User user)
-        {
-            try
-            {
-                _userRepository.Update(user);
-                return true;
-            }
-            catch (Exception exp)
-            {
-                Console.WriteLine(exp);
-                throw new Exception();
-                throw;
-            }
-        }
-
-        public async Task<bool> Delete(int id)
-        {
-            try
-            {
-                await _userRepository.Delete(id);
-                return true;
-            }
-            catch (Exception exp)
-            {
-                Console.WriteLine(exp);
-                throw new Exception();
-                throw;
-            }
+            throw new NotImplementedException();
         }
     }
 }

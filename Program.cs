@@ -15,11 +15,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 // Register Services and Repositories
-builder.Services.AddScoped<IRepository<User>, UserRepository>();
-builder.Services.AddScoped<IRepository<Entry>, EntryRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IEntryRepository, EntryRepository>();
 
-builder.Services.AddScoped<IService<User>, UserService>();
-builder.Services.AddScoped<IService<Entry>, EntryService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEntryService, EntryService>();
 
 var app = builder.Build();
 
