@@ -1,88 +1,63 @@
 ﻿using OfficeHoursCalc.Entities;
 using OfficeHoursCalc.Interfaces;
-using OfficeHoursCalc.Repositories;
 
 namespace OfficeHoursCalc.Services
 {
-    public class EntryService : IService<Entry>
+    public class EntryService : IEntryService
     {
-        private readonly IRepository<Entry> _entryRepository;
-        public EntryService(IRepository<Entry> entryRepository)
+        private readonly IEntryRepository _entryRepository;
+
+        public EntryService(IEntryRepository entryRepository)
         {
             _entryRepository = entryRepository;
         }
 
-        public async Task<IEnumerable<Entry>> GetAll()
+        public async Task AddAsync(Entry entry)
         {
             try
             {
-                return await _entryRepository.GetAll();
+                if (entry == null)
+                    throw new ArgumentNullException("entry");
+                await _entryRepository.AddAsync(entry);
             }
-            catch (Exception exp)
+            catch (Exception exp)  
             {
-                Console.WriteLine(exp);
-                throw new Exception();
-                throw;
+                Console.WriteLine(exp.Message);
+                throw new Exception(exp.Message);
             }
         }
 
-        public async Task<Entry> GetById(int id)
+        public async Task<IEnumerable<Entry>> GetAllAsync()
         {
             try
             {
-                return await _entryRepository.GetById(id);
+                return await _entryRepository.GetAllAsync();
             }
             catch (Exception exp)
             {
-                Console.WriteLine(exp);
-                throw new Exception();
-                throw;
+
+                throw new Exception(exp.Message);
             }
         }
 
-        public async Task<bool> Add(Entry user)
+        public IEnumerable<Entry> GetAllByUserId(int userId)
         {
             try
             {
-                await _entryRepository.Add(user);
-                return true;
+                if(userId < 0) 
+                    throw new ArgumentNullException("userId");
+                return _entryRepository.GetAllByUserId(userId).ToList();
             }
             catch (Exception exp)
             {
-                Console.WriteLine(exp);
-                throw new Exception();
-                throw;
+
+                throw new Exception(exp.Message);
             }
         }
 
-        public bool Update(Entry user)
+        public Task<Entry?> GetByIdAsync(int entryId)
         {
-            try
-            {
-                _entryRepository.Update(user);
-                return true;
-            }
-            catch (Exception exp)
-            {
-                Console.WriteLine(exp);
-                throw new Exception();
-                throw;
-            }
-        }
-
-        public async Task<bool> Delete(int id)
-        {
-            try
-            {
-                await _entryRepository.Delete(id);
-                return true;
-            }
-            catch (Exception exp)
-            {
-                Console.WriteLine(exp);
-                throw new Exception();
-                throw;
-            }
+            throw new NotImplementedException();
         }
     }
 }

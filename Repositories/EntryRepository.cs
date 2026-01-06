@@ -5,38 +5,34 @@ using OfficeHoursCalc.Interfaces;
 
 namespace OfficeHoursCalc.Repositories
 {
-    public class EntryRepository : IRepository<Entry>
+    public class EntryRepository : IEntryRepository
     {
-        private readonly AppDbContext _dbContext;
-        public EntryRepository(AppDbContext appDbContext)
+        private readonly AppDbContext _context;
+
+        public EntryRepository(AppDbContext context)
         {
-            _dbContext = appDbContext;
+            _context = context;
         }
 
-        public async Task<IEnumerable<Entry>> GetAll()
+        public async Task AddAsync(Entry entry)
         {
-            return await _dbContext.Entries.ToListAsync();
+            await _context.Entries.AddAsync(entry);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<Entry> GetById(int id)
+        public async Task<IEnumerable<Entry>> GetAllAsync()
         {
-            return await _dbContext.Entries.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Entries.ToListAsync();
         }
 
-        public async Task Add(Entry entry)
+        public IQueryable<Entry> GetAllByUserId(int userId)
         {
-            await _dbContext.Entries.AddAsync(entry);
+            return _context.Entries.Where(e => e.UserId == userId);
         }
 
-        public void Update(Entry entry)
+        public async Task<Entry?> GetByIdAsync(int entryId)
         {
-            _dbContext.Entries.Update(entry);
-        }
-
-        public async Task Delete(int id)
-        {
-            var entry = await GetById(id);
-            _dbContext.Entries.Remove(entry);
+            return await _context.Entries.FirstOrDefaultAsync(e => e.Id == entryId);
         }
     }
 }
