@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OfficeHoursCalc.Interfaces;
+using OfficeHoursCalc.Models;
 
 namespace OfficeHoursCalc.Controllers
 {

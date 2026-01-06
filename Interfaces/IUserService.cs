@@ -1,4 +1,5 @@
 ﻿using OfficeHoursCalc.Entities;
+using OfficeHoursCalc.Models;
 
 namespace OfficeHoursCalc.Interfaces
 {
@@ -9,6 +10,6 @@ namespace OfficeHoursCalc.Interfaces
         Task AddAsync(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(int userId);
-        Task<User> GetCurrentUserAsync();
+        Task<UserViewModel> GetCurrentUserAsync();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using OfficeHoursCalc.Entities;
 using OfficeHoursCalc.Interfaces;
+using OfficeHoursCalc.Models;
 using System.Threading.Tasks;
 
 namespace OfficeHoursCalc.Services
@@ -48,21 +49,25 @@ namespace OfficeHoursCalc.Services
             throw new NotImplementedException();
         }
 
-        public async Task<User> GetCurrentUserAsync()
+        public async Task<UserViewModel> GetCurrentUserAsync()
         {
             try
             {
                 // Implement latter on auth
                 var user = await _userRepository.GetByIdAsync(1);
                 if (user != null)
-                    return user;
+                    return new UserViewModel
+                    {
+                        Id = user.Id,
+                        Name = user.Name,
+                        Entries = user.Entries,
+                    };
                 else
-                    return null;
+                    return new UserViewModel();
             }
             catch (Exception exp)
             {
-                Console.WriteLine(exp);
-                throw new Exception();
+                throw new Exception(exp.Message);
             }
         }
 

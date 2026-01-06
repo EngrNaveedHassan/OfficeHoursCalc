@@ -1,7 +1,19 @@
-﻿@{
-    
+﻿@model OfficeHoursCalc.Models.UserViewModel
+@{
+    var user = Model;
+    bool isLogIn = (user.Id > 0) ? true : false;
 }
+<div class="d-flex align-item-center justify-content-between gap-1">
+    <h2 class="d-inline" >Hi! @user.Name</h2>
+    @if (isLogIn) {
+        <div>
+            <button class="btn btn-success" >Check In</button>
+            <button class="btn btn-danger" >Check Out</button>
+        </div>
+    }
+    else {
+        <button class="btn btn-info" >LogIn</button>
+    }
 
-<h1>This is Naveed.</h1>
+</div>
 <hr/>
-<p>@ViewData["Message"]</p>
